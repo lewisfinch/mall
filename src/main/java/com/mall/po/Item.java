@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Item {
-    private Long id;
+    private Integer id;
     private String itemName;
     private Integer price;
     private Integer stock;
