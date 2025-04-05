@@ -1,4 +1,4 @@
-package com.mall.po;
+package com.mall.domains.po;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

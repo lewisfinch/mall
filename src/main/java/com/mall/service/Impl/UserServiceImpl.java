@@ -1,8 +1,11 @@
 package com.mall.service.Impl;
 
+import com.mall.domains.dto.LoginDTO;
+import com.mall.domains.vo.LoginVO;
 import com.mall.mapper.UserMapper;
-import com.mall.po.User;
+import com.mall.domains.po.User;
 import com.mall.service.UserService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +20,27 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public User login(User user) {
-        String salt = user.getUsername() + "MALL";
-        String hashedPassword = hashPassword(user.getPassword(), salt);
+    public LoginVO login(LoginDTO loginDTO) {
+        String username = loginDTO.getUsername();
+        String password = loginDTO.getPassword();
 
-        User loginUser = new User();
-        loginUser.setUsername(user.getUsername());
-        loginUser.setPassword(hashedPassword);
+        if(username == null || password == null){
+            return null;
+        }
+
+        String salt = username + "MALL";
+        String hashedPassword = hashPassword(password, salt);
         System.out.println(hashedPassword);
 
-        return userMapper.getByUsernameAndPassword(loginUser);
+        User user = userMapper.getByUsername(loginDTO.getUsername());
+        if(!hashedPassword.equals(user.getPassword())){
+            return null;
+        }
+        LoginVO loginVO = new LoginVO();
+        loginVO.setUserId(user.getId());
+        loginVO.setUsername(user.getUsername());
+        loginVO.setBalance(user.getBalance());
+        return loginVO;
     }
 
     @Override

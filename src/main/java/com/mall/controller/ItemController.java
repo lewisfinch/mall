@@ -1,7 +1,7 @@
 package com.mall.controller;
 
-import com.mall.po.Item;
-import com.mall.po.Result;
+import com.mall.domains.po.Item;
+import com.mall.domains.po.Result;
 import com.mall.service.ItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,31 +16,27 @@ public class ItemController {
     private ItemService itemService;
 
     @GetMapping("/list")
-    public Result list(){
+    public List<Item> list(){
         log.info("Search all items");
-        List<Item> itemList = itemService.list();
-        return Result.success(itemList);
+        return itemService.list();
     }
 
     @GetMapping("/getItemById/{id}")
-    public Result queryItemById(@PathVariable Integer id) {
+    public Item queryItemById(@PathVariable Integer id) {
         log.info("Search item by id={}", id);
-        Item item = itemService.getItemById(id);
-        return Result.success(item);
+        return itemService.getItemById(id);
     }
 
     @GetMapping("/getItemByCategory/{category}")
-    public Result queryItemByCategory(@PathVariable String category) {
+    public List<Item> queryItemByCategory(@PathVariable String category) {
         log.info("Search item by Category={}", category);
-        List<Item> items = itemService.getItemByCategory(category);
-        return Result.success(items);
+        return itemService.getItemByCategory(category);
     }
 
     @GetMapping("/getItemByPrices")
-    public Result queryItemByPrices(@RequestParam int low, @RequestParam int high) {
+    public List<Item> queryItemByPrices(@RequestParam int low, @RequestParam int high) {
         log.info("Searching items with price range: {} - {}", low, high);
-        List<Item> items = itemService.getItemByPrices(low, high);
-        return Result.success(items);
+        return itemService.getItemByPrices(low, high);
     }
 
 }

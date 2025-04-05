@@ -1,6 +1,6 @@
 package com.mall.mapper;
 
-import com.mall.po.Item;
+import com.mall.domains.po.Item;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

@@ -1,4 +1,4 @@
-package com.mall.po;
+package com.mall.domains.po;
 
 
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Item {
     private Integer id;
-    private String itemName;
+    private String name;
     private Integer price;
     private Integer stock;
     private String image;

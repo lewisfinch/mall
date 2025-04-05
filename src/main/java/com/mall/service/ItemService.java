@@ -1,7 +1,6 @@
 package com.mall.service;
 
-import com.mall.po.Item;
-import com.mall.po.User;
+import com.mall.domains.po.Item;
 
 import java.util.List;
 
