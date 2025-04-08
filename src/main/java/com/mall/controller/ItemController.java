@@ -27,6 +27,12 @@ public class ItemController {
         return itemService.getItemById(id);
     }
 
+    @GetMapping("/getItemByIds")
+    public List<Item> queryItemByIds(@RequestParam("ids") List<Integer> ids) {
+        log.info("Search item by ids={}", ids);
+        return itemService.getItemByIds(ids);
+    }
+
     @GetMapping("/getItemByCategory/{category}")
     public List<Item> queryItemByCategory(@PathVariable String category) {
         log.info("Search item by Category={}", category);

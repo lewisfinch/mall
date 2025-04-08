@@ -1,5 +1,6 @@
 package com.mall.service.Impl;
 
+import com.mall.domains.po.OrderDetail;
 import com.mall.mapper.ItemMapper;
 import com.mall.domains.po.Item;
 import com.mall.service.ItemService;
@@ -22,6 +23,18 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item getItemById(Integer id) {
         return itemMapper.getItemById(id);
+    }
+
+    @Override
+    public List<Item> getItemByIds(List<Integer> ids) {
+        return itemMapper.getItemByIds(ids);
+    }
+
+    @Override
+    public void deductStock(List<OrderDetail> orderDetails) {
+        for(OrderDetail orderDetail : orderDetails) {
+            itemMapper.deductStock(orderDetail.getItemId(), orderDetail.getItemNum());
+        }
     }
 
     @Override
