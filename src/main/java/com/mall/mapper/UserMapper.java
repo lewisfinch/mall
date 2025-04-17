@@ -9,4 +9,5 @@ public interface UserMapper {
 
     @Select("SELECT * FROM user WHERE username = #{username}")
     User getByUsername(String username);
+
 }

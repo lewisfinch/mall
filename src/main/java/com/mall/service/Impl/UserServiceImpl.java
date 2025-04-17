@@ -5,7 +5,6 @@ import com.mall.domains.vo.LoginVO;
 import com.mall.mapper.UserMapper;
 import com.mall.domains.po.User;
 import com.mall.service.UserService;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

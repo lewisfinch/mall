@@ -17,6 +17,7 @@ public class UserInfoInterceotor implements HandlerInterceptor {
         }
         Integer userId = Integer.valueOf(userInfo);
         UserContext.setCurrentUser(userId);
+        System.out.println("check");
         return true;
     }
 
