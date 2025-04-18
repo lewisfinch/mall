@@ -1,11 +1,11 @@
 package com.mall.service.Impl;
 
 import com.mall.domains.dto.LoginDTO;
+import com.mall.domains.dto.SignUpDTO;
 import com.mall.domains.vo.LoginVO;
 import com.mall.mapper.UserMapper;
 import com.mall.domains.po.User;
 import com.mall.service.UserService;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +44,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean signUp(SignUpDTO signUpDTO) {
+        String username = signUpDTO.getUsername();
+        String password = signUpDTO.getPassword();
+
+        if(username == null || password == null){
+            return false;
+        }
+
+        if (userMapper.countByUsername(username) > 0) {
+            System.out.println("Username Exists!");
+            return false;
+        }
+
+        String salt = username + "MALL";
+        String hashedPassword = hashPassword(password, salt);
+
+        User newUser = new User();
+        newUser.setUsername(username);
+        newUser.setPassword(hashedPassword);
+        newUser.setBalance(10000);
+        newUser.setFname(signUpDTO.getFname());
+        newUser.setLname(signUpDTO.getLname());
+        newUser.setEmail(signUpDTO.getEmail());
+        userMapper.insertUser(newUser);
+        return true;
+    }
+
+    @Override
     public String hashPassword(String password, String salt) {
         try {
             String saltedPassword = salt + password;
@@ -53,5 +81,10 @@ public class UserServiceImpl implements UserService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error hashing password", e);
         }
+    }
+
+    @Override
+    public void deductBalance(Integer userId, Integer balance) {
+        userMapper.deductBalance(userId, balance);
     }
 }

@@ -1,11 +1,13 @@
 package com.mall.interceptor;
 
 import com.mall.utils.UserContext;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Component
 public class UserInfoInterceotor implements HandlerInterceptor {
 
     @Override

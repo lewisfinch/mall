@@ -1,11 +1,9 @@
 package com.mall.controller;
 
 import com.mall.domains.dto.LoginDTO;
-import com.mall.domains.po.Result;
-import com.mall.domains.po.User;
+import com.mall.domains.dto.SignUpDTO;
 import com.mall.domains.vo.LoginVO;
 import com.mall.service.UserService;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,5 +21,11 @@ public class UserController {
     public LoginVO login(@RequestBody LoginDTO loginDTO) {
         log.info("User login: {}", loginDTO);
         return userService.login(loginDTO);
+    }
+
+    @PostMapping("/signUp")
+    public boolean signUp(@RequestBody SignUpDTO signUpDTO) {
+        log.info("User sign up: {}", signUpDTO);
+        return userService.signUp(signUpDTO);
     }
 }

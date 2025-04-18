@@ -5,6 +5,7 @@ import com.mall.domains.po.OrderDetail;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.time.LocalDateTime;
 
@@ -24,4 +25,7 @@ public interface OrderMapper {
     @Insert("INSERT INTO order_detail (order_id, item_id, item_num, item_name, price, image) " +
             "VALUES (#{orderId}, #{itemId}, #{itemNum}, #{itemName}, #{price}, #{image})")
     void addOrderDetail(OrderDetail orderDetail);
+
+    @Update("UPDATE `order` SET status = #{status}, pay_time = #{payTime} WHERE id = #{orderId}")
+    void updateOrderPayment(Integer orderId, Integer status, LocalDateTime payTime);
 }
