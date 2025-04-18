@@ -26,7 +26,10 @@ public class CartServiceImpl implements CartService {
     public void addToCart(CartDTO cartDTO) {
         Integer userId = UserContext.getCurrentUser();
         if(checkItemExist(userId, cartDTO.getItemId())){
-            cartMapper.updateNum(userId, cartDTO.getItemId());
+            int affected = cartMapper.updateNum(userId, cartDTO.getItemId());
+            if(affected == 0){
+                throw new RuntimeException("Cart update Failed");
+            }
             return;
         }
         Cart cart = new Cart();
@@ -37,17 +40,27 @@ public class CartServiceImpl implements CartService {
         cart.setItemImage(cartDTO.getItemImage());
         cart.setItemNum(1);
         cartMapper.addToCart(cart);
+        int affected = cartMapper.addToCart(cart);
+        if (affected == 0) {
+            throw new RuntimeException("Cart insertion Failed");
+        }
     }
 
     @Override
     public void updateCart(Cart cart){
         cart.setUserId(UserContext.getCurrentUser());
-        cartMapper.updateCart(cart);
+        int affected = cartMapper.updateCart(cart);
+        if (affected == 0) {
+            throw new RuntimeException("Cart update Failed");
+        }
     }
 
     @Override
     public void removeById(Integer id) {
-        cartMapper.removeById(id);
+        int affected = cartMapper.removeById(id);
+        if (affected == 0) {
+            throw new RuntimeException("Cart Remove Failed");
+        }
     }
 
 

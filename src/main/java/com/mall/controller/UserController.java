@@ -24,8 +24,8 @@ public class UserController {
     }
 
     @PostMapping("/signUp")
-    public boolean signUp(@RequestBody SignUpDTO signUpDTO) {
+    public void signUp(@RequestBody SignUpDTO signUpDTO) {
         log.info("User sign up: {}", signUpDTO);
-        return userService.signUp(signUpDTO);
+        userService.signUp(signUpDTO);
     }
 }

@@ -32,6 +32,12 @@ public interface ItemMapper {
     @Select("SELECT * FROM item WHERE price BETWEEN #{low} AND #{high}")
     List<Item> getItemByPrices(int low, int high);
 
-    @Update("UPDATE item SET stock = stock - #{itemNum}, sold = sold + #{itemNum} WHERE id = #{itemId}")
-    void deductStock(Integer itemId, Integer itemNum);
+    @Select("SELECT * FROM item WHERE category = #{category} AND price BETWEEN #{low} AND #{high}")
+    List<Item> getItemByCategoryAndPrices(String category, int low, int high);
+
+    @Update("UPDATE item SET stock = stock - #{itemNum}, sold = sold + #{itemNum} WHERE id = #{itemId} AND stock >= #{itemNum}")
+    int deductStock(Integer itemId, Integer itemNum);
+
+    @Update("UPDATE item SET stock = stock + #{itemNum}, sold = sold - #{itemNum} WHERE id = #{itemId}")
+    int recoverStock(Integer itemId, Integer itemNum);
 }

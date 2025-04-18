@@ -12,5 +12,7 @@ public interface OrderService {
 
     Integer createOrder(OrderDTO orderDTO);
 
-    void InsertOrderDetail(OrderDetail orderDetail);
+    void confirmRecipt(Integer orderId);
+
+    void cancelOrder(Integer orderId);
 }

@@ -45,4 +45,10 @@ public class ItemController {
         return itemService.getItemByPrices(low, high);
     }
 
+    @GetMapping("/getItemByCategoryAndPrices")
+    public List<Item> queryItemByCategoryAndPrices(@RequestParam String category, @RequestParam int low, @RequestParam int high) {
+        log.info("Searching items by Category={} with price range: {} - {}", category, low, high);
+        return itemService.getItemByCategoryAndPrices(category, low, high);
+    }
+
 }

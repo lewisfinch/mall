@@ -9,9 +9,11 @@ public interface UserService {
 
     LoginVO login(LoginDTO loginDTO);
 
-    boolean signUp(SignUpDTO signUpDTO);
+    void signUp(SignUpDTO signUpDTO);
 
     String hashPassword(String password, String salt);
 
     void deductBalance(Integer userId, Integer balance);
+
+    void addBalance(Integer userId, Integer balance);
 }

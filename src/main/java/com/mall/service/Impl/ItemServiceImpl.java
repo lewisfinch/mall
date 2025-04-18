@@ -33,7 +33,20 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void deductStock(List<OrderDetail> orderDetails) {
         for(OrderDetail orderDetail : orderDetails) {
-            itemMapper.deductStock(orderDetail.getItemId(), orderDetail.getItemNum());
+            int affected = itemMapper.deductStock(orderDetail.getItemId(), orderDetail.getItemNum());
+            if (affected == 0) {
+                throw new RuntimeException("Stock not enough, deduction failed, itemId=" + orderDetail.getItemId());
+            }
+        }
+    }
+
+    @Override
+    public void recoverStock(List<OrderDetail> orderDetails) {
+        for(OrderDetail orderDetail : orderDetails) {
+            int affected = itemMapper.recoverStock(orderDetail.getItemId(), orderDetail.getItemNum());
+            if (affected == 0) {
+                throw new RuntimeException("Stock recover failed");
+            }
         }
     }
 
@@ -47,6 +60,10 @@ public class ItemServiceImpl implements ItemService {
         return itemMapper.getItemByPrices(low, high);
     }
 
+    @Override
+    public List<Item> getItemByCategoryAndPrices(String category, int low, int high) {
+        return itemMapper.getItemByCategoryAndPrices(category, low, high);
+    }
 
 }
 

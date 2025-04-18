@@ -23,4 +23,15 @@ public class OrderController {
     public Integer createOrder(@RequestBody OrderDTO orderDTO) {
         return orderService.createOrder(orderDTO);
     }
+
+    @PostMapping("/confirmRecipt/{id}")
+    public void confirmRecipt(@PathVariable("id") Integer orderId) {
+        orderService.confirmRecipt(orderId);
+    }
+
+    @PostMapping("/cancelOrder/{id}")
+    public void cancelOrder(@PathVariable("id") Integer orderId) {
+        orderService.cancelOrder(orderId);
+    }
+
 }

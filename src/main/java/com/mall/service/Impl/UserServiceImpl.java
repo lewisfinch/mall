@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
         String password = loginDTO.getPassword();
 
         if(username == null || password == null){
-            return null;
+            throw new RuntimeException("Username or password is null");
         }
 
         String salt = username + "MALL";
@@ -33,8 +33,11 @@ public class UserServiceImpl implements UserService {
         System.out.println(hashedPassword);
 
         User user = userMapper.getByUsername(loginDTO.getUsername());
+        if(user == null){
+            throw new RuntimeException("Cannot find user");
+        }
         if(!hashedPassword.equals(user.getPassword())){
-            return null;
+            throw new RuntimeException("Password does not match");
         }
         LoginVO loginVO = new LoginVO();
         loginVO.setUserId(user.getId());
@@ -44,17 +47,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean signUp(SignUpDTO signUpDTO) {
+    public void signUp(SignUpDTO signUpDTO) {
         String username = signUpDTO.getUsername();
         String password = signUpDTO.getPassword();
 
         if(username == null || password == null){
-            return false;
+            throw new RuntimeException("Username or password is null");
         }
 
         if (userMapper.countByUsername(username) > 0) {
-            System.out.println("Username Exists!");
-            return false;
+            throw new RuntimeException("Username existed");
         }
 
         String salt = username + "MALL";
@@ -67,8 +69,11 @@ public class UserServiceImpl implements UserService {
         newUser.setFname(signUpDTO.getFname());
         newUser.setLname(signUpDTO.getLname());
         newUser.setEmail(signUpDTO.getEmail());
-        userMapper.insertUser(newUser);
-        return true;
+        try{
+            userMapper.insertUser(newUser);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -85,6 +90,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deductBalance(Integer userId, Integer balance) {
-        userMapper.deductBalance(userId, balance);
+        int affected = userMapper.deductBalance(userId, balance);
+        if (affected == 0) {
+            throw new RuntimeException("Balance not enough, deduction failed");
+        }
+    }
+
+    @Override
+    public void addBalance(Integer userId, Integer balance) {
+        int affected = userMapper.addBalance(userId, balance);
+        if (affected == 0) {
+            throw new RuntimeException("Balance addition failed");
+        }
     }
 }

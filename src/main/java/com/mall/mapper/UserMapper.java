@@ -18,6 +18,9 @@ public interface UserMapper {
     @Insert("INSERT INTO user (username, password, fname, lname, email, balance) VALUES (#{username}, #{password}, #{fname}, #{lname}, #{email}, #{balance})")
     void insertUser(User user);
 
-    @Update("UPDATE user SET balance = balance - #{balance} WHERE id = #{userId}")
-    void deductBalance(Integer userId, Integer balance);
+    @Update("UPDATE user SET balance = balance - #{balance} WHERE id = #{userId} AND balance >= #{balance}")
+    int deductBalance(Integer userId, Integer balance);
+
+    @Update("UPDATE user SET balance = balance + #{balance} WHERE id = #{userId}")
+    int addBalance(Integer userId, Integer balance);
 }

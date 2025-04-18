@@ -6,8 +6,8 @@ import lombok.Getter;
 public enum OrderStatus {
     WAIT_PAY(1, "Wait for Payment"),
     PAID_SHIPPING(2, "Paid, Wait for Delivery"),
-    CANCELED(3, "Canceled and Refunded"),
-    CLOSED(4, "Closed"),
+    SHIPPED(3, "Shipped, 7 days Free Refund"),
+    CANCELED(4, "Canceled and Refunded"),
     ;
     private final int value;
     private final String desc;

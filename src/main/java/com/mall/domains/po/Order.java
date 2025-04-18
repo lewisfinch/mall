@@ -17,5 +17,5 @@ public class Order {
     private LocalDateTime createTime;
     private LocalDateTime payTime;
     private LocalDateTime shipTime;
-    private LocalDateTime closeTime;
+    private LocalDateTime cancelTime;
 }

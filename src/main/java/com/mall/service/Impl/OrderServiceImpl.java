@@ -61,8 +61,8 @@ public class OrderServiceImpl implements OrderService {
         List<Item> items = itemService.getItemByIds(itemIdList);
 
         // 5. Check Items NULL or ERROR
-        if(items == null || items.size() < itemIdList.size()) {
-            return -1;
+        if (items == null || items.size() < itemIdList.size()) {
+            throw new RuntimeException("Items not exist, Order Creation Failed");
         }
 
         // 6. Calculate Total Price
@@ -77,10 +77,16 @@ public class OrderServiceImpl implements OrderService {
         order.setUserId(UserContext.getCurrentUser());
         order.setStatus(OrderStatus.WAIT_PAY.getValue());
         order.setCreateTime(LocalDateTime.now().withNano(0));
-        orderMapper.addOrder(order);
+        int affected = orderMapper.addOrder(order);
+        if(affected == 0) {
+            throw new RuntimeException("Order Creation Failed");
+        }
 
         // 8. Get OrderId
         Integer orderId = orderMapper.getOrderByUTF(order.getUserId(), order.getCreateTime(), order.getTotalFee());
+        if(orderId == null) {
+            throw new RuntimeException("Cannot get OrderId");
+        }
 
         // 9. Insert OrderDetails and Remove CartItems
         List<OrderDetail> orderDetails = new ArrayList<>();
@@ -93,8 +99,11 @@ public class OrderServiceImpl implements OrderService {
             orderDetail.setPrice(item.getPrice() * orderDetail.getItemNum());
             orderDetail.setImage(item.getImage());
             orderDetails.add(orderDetail);
-            orderMapper.addOrderDetail(orderDetail);
-            cartService.removeById(item.getId());
+            affected = orderMapper.addOrderDetail(orderDetail);
+            if(affected == 0) {
+                throw new RuntimeException("OrderDetail Insertion Failed");
+            }
+//            cartService.removeById(item.getId());
         }
 
         // 10. Deduct Stock
@@ -102,14 +111,40 @@ public class OrderServiceImpl implements OrderService {
 
         // 11. Deduct Balance
         userService.deductBalance(UserContext.getCurrentUser(), total);
-        orderMapper.updateOrderPayment(orderId, OrderStatus.PAID_SHIPPING.getValue(), LocalDateTime.now());
-
+        affected = orderMapper.updateOrderPayment(orderId, OrderStatus.PAID_SHIPPING.getValue(), LocalDateTime.now().withNano(0));
+        if(affected == 0) {
+            throw new RuntimeException("Order Update Failed");
+        }
         // 12. Return Order
         return order.getId();
     }
 
     @Override
-    public void InsertOrderDetail(OrderDetail orderDetail) {
-        orderMapper.addOrderDetail(orderDetail);
+    public void confirmRecipt(Integer orderId) {
+        int affected = orderMapper.updateOrderArrival(orderId, OrderStatus.SHIPPED.getValue(), LocalDateTime.now().withNano(0));
+        if (affected == 0) {
+            throw new RuntimeException("Order Update Failed");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void cancelOrder(Integer orderId) {
+        Order order = orderMapper.getOrderById(orderId);
+        List<OrderDetail> orderDetails = orderMapper.getOrderDetail(orderId);
+        if(order == null) {
+            throw new RuntimeException("Order Not Exist");
+        }
+        LocalDateTime shipTime = order.getCreateTime();
+        LocalDateTime now = LocalDateTime.now().withNano(0);
+        if (shipTime.plusDays(7).isBefore(now)) {
+            throw new RuntimeException("Refund time passed");
+        }
+        int affected = orderMapper.updateOrderClose(orderId, OrderStatus.CANCELED.getValue(), LocalDateTime.now().withNano(0));
+        if (affected == 0) {
+            throw new RuntimeException("Order Update Failed");
+        }
+        userService.addBalance(UserContext.getCurrentUser(), order.getTotalFee());
+        itemService.recoverStock(orderDetails);
     }
 }

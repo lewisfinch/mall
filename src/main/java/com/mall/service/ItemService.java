@@ -15,8 +15,12 @@ public interface ItemService {
 
     List<Item> getItemByPrices(int low, int high);
 
+    List<Item> getItemByCategoryAndPrices(String category, int low, int high);
+
     List<Item> getItemByIds(List<Integer> ids);
 
     void deductStock(List<OrderDetail> orderDetails);
+
+    void recoverStock(List<OrderDetail> orderDetails);
 }
 
