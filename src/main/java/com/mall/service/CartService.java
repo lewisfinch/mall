@@ -9,9 +9,11 @@ public interface CartService {
 
     List<Cart> getMyCart();
 
-    void addToCart(CartDTO cartDTO);
+    int addToCart(CartDTO cartDTO);
 
     void updateCart(Cart cart);
+
+    void removeByUserIdAndItemIds(Integer userId, List<Integer> itemIds);
 
     void removeById(Integer id);
 }

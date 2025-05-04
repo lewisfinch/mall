@@ -2,10 +2,7 @@ package com.mall.mapper;
 
 import com.mall.domains.po.Order;
 import com.mall.domains.po.OrderDetail;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +13,10 @@ public interface OrderMapper {
     @Select("SELECT * FROM `order` WHERE id = #{id}")
     Order getOrderById(Integer id);
 
+    @Select("SELECT * FROM `order` WHERE user_id = #{userId} ORDER BY create_time DESC")
+    List<Order> getOrdersByUserId(Integer userId);
+
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("INSERT INTO `order` (total_fee, user_id, status, create_time, pay_time, ship_time, cancel_time) " +
             "VALUES (#{totalFee}, #{userId}, #{status}, #{createTime}, #{payTime}, #{shipTime}, #{cancelTime})")
     int addOrder(Order order);

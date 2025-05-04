@@ -10,6 +10,8 @@ public interface OrderService {
 
     Order getOrder(Integer orderId);
 
+    List<Order> getMyOrders();
+
     Integer createOrder(OrderDTO orderDTO);
 
     void confirmRecipt(Integer orderId);

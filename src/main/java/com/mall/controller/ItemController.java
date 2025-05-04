@@ -18,8 +18,10 @@ public class ItemController {
     @GetMapping("/list")
     public List<Item> list(){
         log.info("Search all items");
+        System.out.println(itemService.list().toString());
         return itemService.list();
     }
+
 
     @GetMapping("/getItemById/{id}")
     public Item queryItemById(@PathVariable Integer id) {

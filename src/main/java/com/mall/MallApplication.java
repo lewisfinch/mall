@@ -6,7 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @MapperScan("com.mall.mapper")
-public class MallApplication {
+public class
+MallApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MallApplication.class, args);

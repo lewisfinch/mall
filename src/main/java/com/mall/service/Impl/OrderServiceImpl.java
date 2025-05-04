@@ -41,6 +41,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> getMyOrders() {
+        Integer userId = UserContext.getCurrentUser();
+        return orderMapper.getOrdersByUserId(userId);
+    }
+
+    @Override
     @Transactional
     public Integer createOrder(OrderDTO orderDTO) {
 
@@ -67,8 +73,8 @@ public class OrderServiceImpl implements OrderService {
 
         // 6. Calculate Total Price
         int total = 0;
-        for(Item item : items) {
-            total += item.getPrice() * itemMap.get(item.getId());
+        for (Item item : items) {
+            total += (int)(item.getPrice()) * itemMap.get(item.getId());
         }
 
         // 7. Build Order
@@ -103,8 +109,8 @@ public class OrderServiceImpl implements OrderService {
             if(affected == 0) {
                 throw new RuntimeException("OrderDetail Insertion Failed");
             }
-//            cartService.removeById(item.getId());
         }
+        cartService.removeByUserIdAndItemIds(UserContext.getCurrentUser(), itemIdList);
 
         // 10. Deduct Stock
         itemService.deductStock(orderDetails);

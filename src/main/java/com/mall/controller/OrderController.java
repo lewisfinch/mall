@@ -7,6 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Slf4j
 @RestController
 public class OrderController {
@@ -19,9 +23,17 @@ public class OrderController {
         return orderService.getOrder(orderId);
     }
 
+    @GetMapping("/myOrders")
+    public List<Order> getMyOrders() {
+        return orderService.getMyOrders();
+    }
+
     @PostMapping("/createOrder")
-    public Integer createOrder(@RequestBody OrderDTO orderDTO) {
-        return orderService.createOrder(orderDTO);
+    public Map<String, Object> createOrder(@RequestBody OrderDTO orderDTO) {
+        Integer orderId = orderService.createOrder(orderDTO);
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", orderId);
+        return result;
     }
 
     @PostMapping("/confirmRecipt/{id}")

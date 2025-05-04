@@ -37,6 +37,8 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Cannot find user");
         }
         if(!hashedPassword.equals(user.getPassword())){
+            System.out.println("this is wrong password");
+            System.out.println(user.getPassword());
             throw new RuntimeException("Password does not match");
         }
         LoginVO loginVO = new LoginVO();
