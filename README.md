@@ -7,6 +7,11 @@ Upon purchasing, the system automatically deducts the corresponding amount from 
 
 After placing an order, users have **7 days** to request a refund from the order interface. Upon refund, the user's balance and the item's stock are both restored to their original states.
 
+## 👥 Project Members
+
+* **Yicheng Zhai** (`yz11708`)
+* **Weijun Huang** (`wh2531`)
+
 ## 🛠️ Technology Stack
 
 * **Backend:** Java 18, Spring Boot
