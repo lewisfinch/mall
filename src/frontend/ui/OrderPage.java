@@ -13,9 +13,11 @@ import java.util.List;
 public class OrderPage extends JFrame {
     private final int userId;
     private final JPanel contentPanel;
+    private final UserPage userPage;
 
-    public OrderPage(int userId) {
+    public OrderPage(int userId,UserPage userPage) {
         this.userId = userId;
+        this.userPage = userPage;
 
         setTitle("My Orders");
         setSize(700, 600);
@@ -95,6 +97,7 @@ public class OrderPage extends JFrame {
                         protected void done() {
                             JOptionPane.showMessageDialog(OrderPage.this, "Order canceled and refunded successfully!");
                             loadOrders();
+                            userPage.refreshAllItems();
                         }
                     };
                     worker.execute();

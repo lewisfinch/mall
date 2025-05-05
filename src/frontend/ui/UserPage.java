@@ -29,7 +29,7 @@ public class UserPage extends JFrame {
 
         // Top bar
         JPanel topPanel = new JPanel(new BorderLayout());
-        TopBar topBar = new TopBar(username,userId);
+        TopBar topBar = new TopBar(username, userId, this);
         topPanel.add(topBar.getPanel(), BorderLayout.NORTH);
         // Top bar button action listener
         topBar.getCartButton().addActionListener(e -> new CartPage(cartService,userId,this));
@@ -113,14 +113,24 @@ public class UserPage extends JFrame {
 
         JButton addCart = new JButton("Add Selected Items to Cart");
         addCart.addActionListener(e -> {
+            boolean anyAdded = false;
             for (Component c : contentPanel.getComponents()) {
-                // return all the item from current content panel
-                // then check item is select or not, if it does, add to the cart
                 if (c instanceof ItemPanel ip && ip.isSelected()) {
-                    cartService.addToCart(ip.getItem(), ip.getSelectedQuantity());
+                    int qty = ip.getSelectedQuantity();
+                    int stock = ip.getItem().getStock();
+                    System.out.println("qty: " + qty+" stock: " + stock);
+                    if (qty > stock) {
+                        JOptionPane.showMessageDialog(this, "Not enough stock for " + ip.getItem().getName() +
+                                ". Available: " + stock + ", requested: " + qty);
+                    } else {
+                        cartService.addToCart(ip.getItem(), qty);
+                        anyAdded = true;
+                    }
                 }
             }
-            JOptionPane.showMessageDialog(this, "Selected items added to cart.");
+            if (anyAdded) {
+                JOptionPane.showMessageDialog(this, "Selected items added to cart.");
+            }
         });
 
         footer.add(nav, BorderLayout.WEST);

@@ -34,6 +34,7 @@ public class CartService {
 
         // If new item, add to cart
         CartItem newItem = new CartItem(item, quantity);
+        System.out.println(newItem .getQuantity());
         int cartId = addItemToBackendCart(newItem);
         newItem.setCartId(cartId);
         cartItems.add(newItem);

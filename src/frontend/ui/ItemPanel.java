@@ -50,7 +50,12 @@ public class ItemPanel extends JPanel {
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         selectBox = new JCheckBox("Select");
 
-        quantity = new JSpinner(new SpinnerNumberModel(1, 1, item.getStock(), 1));
+        if (item.getStock() > 0) {
+            quantity = new JSpinner(new SpinnerNumberModel(1, 1, item.getStock(), 1));
+        } else {
+            quantity = new JSpinner(new SpinnerNumberModel(0, 0, 0, 0));
+            quantity.setEnabled(false);
+        }
         JFormattedTextField spinnerField = ((JSpinner.DefaultEditor) quantity.getEditor()).getTextField();
         spinnerField.setColumns(3);
 
@@ -71,7 +76,7 @@ public class ItemPanel extends JPanel {
         try {
             return ((Number) quantity.getValue()).intValue();
         } catch (Exception e) {
-            return 1; // 防止出错，默认返回1
+            return 1;
         }
     }
 

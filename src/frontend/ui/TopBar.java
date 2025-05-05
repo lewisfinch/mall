@@ -13,8 +13,10 @@ public class TopBar {
     private JButton mainButton;
     private JButton exitButton;
     private JLabel userInfoLabel;
+    private UserPage userPage;
 
-    public TopBar(String username,int userId) {
+    public TopBar(String username,int userId,UserPage userPage) {
+        this.userPage = userPage;
         panel = new JPanel(new BorderLayout());
 
         mainButton = new JButton("Main Page");
@@ -23,7 +25,7 @@ public class TopBar {
         JPanel rightTopBar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         cartButton = new JButton("Cart");
         cancelButton = new JButton("Order & Cancel");
-        cancelButton.addActionListener(e -> new OrderPage(userId));
+        cancelButton.addActionListener(e -> new OrderPage(userId, userPage));
         exitButton = new JButton("Logout");
 
         rightTopBar.add(new JLabel("Hi, " + username + " "));
